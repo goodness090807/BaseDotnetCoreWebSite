@@ -1,0 +1,53 @@
+﻿@model BaseDotnetCoreWebSite.ViewModels.Account.LoginViewModel
+@{
+    ViewBag.Title = "使用者登入";
+    var returnUrl = Context.Request.Query["returnurl"];
+}
+<div class="row align-items-center DivPageCenter">
+    <div class="col-sm-12 text-center">
+        <h1>程式學習會員系統</h1>
+    </div>
+    <div class="col-sm-4">
+
+    </div>
+    <div class="col-sm-4 LoginDiv">
+        <form asp-controller="Account" asp-action="Login" asp-route-returnurl="@returnUrl" method="post" autocomplete="off">
+            @Html.AntiForgeryToken()
+
+            <div class="form-group">
+                <label asp-for="Account"></label>
+                <div class="input-group mb-3">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text"><i class="fa fa-user"></i></span>
+                    </div>
+                    <input type="text" asp-for="Account" class="form-control" placeholder="在此輸入帳號" />
+                </div>
+                <span asp-validation-for="Account" class="form-text text-danger"></span>
+            </div>
+
+
+            <div class="form-group">
+                <label asp-for="Password"></label>
+                <div class="input-group mb-3">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text"><i class="fa fa-lock"></i></span>
+                    </div>
+                    <input asp-for="Password" class="form-control" placeholder="在此輸入帳號" />
+                </div>
+                <span asp-validation-for="Password" class="form-text text-danger"></span>
+            </div>
+
+
+            @Html.ValidationSummary(true, "", new { @class = "form-text text-danger ValidationSummaryStyle" })
+
+            <input class="btn btn-dark btn-block " type="submit" value="登入">
+            <a href="Register" class="btn btn-dark btn-block">點我註冊新帳號</a>
+            <br />
+            <div class="form-group text-center">
+                <a href="#" class="">忘記密碼</a>
+            </div>
+        </form>
+    </div>
+    <div class="col-sm-4">
+    </div>
+</div>
