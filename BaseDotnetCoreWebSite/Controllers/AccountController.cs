@@ -5,6 +5,7 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 using BaseDotnetCoreWebSite.Models;
 using BaseDotnetCoreWebSite.Repository;
+using BaseDotnetCoreWebSite.Service;
 using BaseDotnetCoreWebSite.ViewModels.Account;
 using BaseLibrary.Security;
 using Microsoft.AspNetCore.Authentication;
@@ -13,13 +14,16 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace BaseDotnetCoreWebSite.Controllers
 {
+    [AutoValidateAntiforgeryToken]
     public class AccountController : Controller
     {
         private readonly AccountRepository _accountRepository;
+        private readonly AccountService _accountService;
 
-        public AccountController(AccountRepository accountRepository)
+        public AccountController(AccountRepository accountRepository, AccountService accountService)
         {
             _accountRepository = accountRepository;
+            _accountService = accountService;
         }
 
         public IActionResult Index()
@@ -36,25 +40,24 @@ namespace BaseDotnetCoreWebSite.Controllers
         [HttpPost]
         public async Task<IActionResult> Login(LoginViewModel loginViewModel, string returnUrl)
         {
+            if(!ModelState.IsValid)
+            {
+                return View();
+            }
+
             AccountModel accountModel = _accountRepository.GetAccount(loginViewModel.Account, loginViewModel.Password.ToMD5());
 
             if(accountModel == null)
             {
-                ModelState.AddModelError("", "請輸入正確的帳號或密碼!");
+                ModelState.AddModelError("", "帳號或密碼錯誤!");
                 return View();
             }
 
-            var claims = new List<Claim>
-            {
-                new Claim(ClaimTypes.Name, accountModel.UID),
-                new Claim("UserName", accountModel.UserName),
-                new Claim(ClaimTypes.Role, "Administrator")
-            };
-
-            var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
-
+            //取得claimsIdentity
+            var claimsIdentity = _accountService.GetClaimsIdentity(accountModel);
+            //登入使用者
             await HttpContext.SignInAsync(new ClaimsPrincipal(claimsIdentity));
-
+            //防止跨網域攻擊
             if (!String.IsNullOrEmpty(returnUrl) && Url.IsLocalUrl(returnUrl))
                 return Redirect(returnUrl);
 

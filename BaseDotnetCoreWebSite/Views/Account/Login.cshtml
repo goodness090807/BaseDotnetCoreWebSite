@@ -20,7 +20,7 @@
                     <div class="input-group-prepend">
                         <span class="input-group-text"><i class="fa fa-user"></i></span>
                     </div>
-                    <input type="text" asp-for="Account" class="form-control" placeholder="在此輸入帳號" />
+                    <input type="text" asp-for="Account" class="form-control" placeholder="輸入帳號" />
                 </div>
                 <span asp-validation-for="Account" class="form-text text-danger"></span>
             </div>
@@ -32,13 +32,13 @@
                     <div class="input-group-prepend">
                         <span class="input-group-text"><i class="fa fa-lock"></i></span>
                     </div>
-                    <input asp-for="Password" class="form-control" placeholder="在此輸入帳號" />
+                    <input asp-for="Password" class="form-control" placeholder="輸入密碼" />
                 </div>
                 <span asp-validation-for="Password" class="form-text text-danger"></span>
             </div>
 
-
-            @Html.ValidationSummary(true, "", new { @class = "form-text text-danger ValidationSummaryStyle" })
+            @*查無帳密的錯誤訊息*@
+            <div asp-validation-summary="ModelOnly" class="form-text text-danger"></div>
 
             <input class="btn btn-dark btn-block " type="submit" value="登入">
             <a href="Register" class="btn btn-dark btn-block">點我註冊新帳號</a>

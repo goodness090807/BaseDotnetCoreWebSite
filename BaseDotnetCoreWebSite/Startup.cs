@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using BaseDotnetCoreWebSite.Repository;
+using BaseDotnetCoreWebSite.Service;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -29,6 +30,10 @@ namespace BaseDotnetCoreWebSite
             //Add Repositories
             services.AddTransient<BaseRepository>();
             services.AddTransient<AccountRepository>();
+
+            //Add Service
+            services.AddTransient<AccountService>();
+            
 
             services.AddControllersWithViews();
 

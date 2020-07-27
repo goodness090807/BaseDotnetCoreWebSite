@@ -13,6 +13,7 @@ using Microsoft.AspNetCore.Authentication;
 
 namespace BaseDotnetCoreWebSite.Controllers
 {
+    [Authorize]
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
@@ -22,13 +23,12 @@ namespace BaseDotnetCoreWebSite.Controllers
             _logger = logger;
         }
 
-        [Authorize]
+        [AllowAnonymous]
         public IActionResult Index()
         {
             return View();
         }
 
-        [Authorize]
         public IActionResult Privacy()
         {
             return View();
